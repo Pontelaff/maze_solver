@@ -2,7 +2,7 @@ from tkinter import Tk, BOTH, Canvas
 
 
 class Point():
-    def __init__(self, x: int, y: int):
+    def __init__(self, x: int | float, y: int | float):
         self.x = x
         self.y = y
 
@@ -17,8 +17,10 @@ class Line():
 
 
 class Cell():
-    def __init__(self, window: "Window", top_left: Point, bottom_right: Point):
-        self.__win = window
+    def __init__(self, win: "Window", top_left: Point, bottom_right: Point):
+        if top_left.x > bottom_right.x or top_left.y > bottom_right.y:
+            raise ValueError("Cell excpects top-left and bottom-right point as input")
+        self.__win = win
         self.__p1 = top_left
         self.__p2 = bottom_right
         self.has_left_wall = True
@@ -32,7 +34,7 @@ class Cell():
         self.has_right_wall = right
         self.has_bottom_wall = bottom
 
-    def draw(self, color) -> None:
+    def draw(self, color: str) -> None:
         # Draw walls based on top-left and bottom-right points
         if self.has_left_wall:
             self.__win.draw_line(Line(self.__p1, Point(self.__p1.x, self.__p2.y)), color)
@@ -42,6 +44,17 @@ class Cell():
             self.__win.draw_line(Line(self.__p2, Point(self.__p2.x, self.__p1.y)), color)
         if self.has_bottom_wall:
             self.__win.draw_line(Line(self.__p2, Point(self.__p1.x, self.__p2.y)), color)
+
+    def draw_path(self, other: object, undo: bool = False) -> None:
+        if not isinstance(other, Cell):
+            raise NotImplementedError("can only draw path to other cell object")
+        if undo:
+            color = "gray"
+        else:
+            color = "red"
+        start = Point(self.__p1.x + (self.__p2.x - self.__p1.x)/2, self.__p1.y + (self.__p2.y - self.__p1.y)/2)
+        end = Point(other.__p1.x + (other.__p2.x - other.__p1.x)/2, other.__p1.y + (other.__p2.y - other.__p1.y)/2)
+        self.__win.draw_line(Line(start, end), color)
 
 
 class Window():

@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
 import sys
-from graphics import Window, Point, Line, Cell
+from graphics import Window, Point
+from maze import Maze
 
+def init_maze(win: Window, window_width: int, window_height: int) -> Maze:
+    cell_size = 50
+    min_border = 25
+    maze_width = (window_width - min_border) // cell_size
+    maze_height = (window_height - min_border) // cell_size
+    x0 = (window_width - maze_width * cell_size) / 2
+    y0 = (window_height - maze_height * cell_size) / 2
+    maze =  Maze(win, Point(x0, y0), maze_width, maze_height, cell_size, cell_size)
+    maze.animate()
+
+    return maze
 
 def main() -> int:
-    win = Window(800, 600)
-    line = Line(Point(69, 32), Point(420, 123))
-    cell1 = Cell(win, Point(10, 10), Point(20, 20))
-    cell1.draw("gray")
-    cell1.set_walls(False, False, False, True)
-    cell1.draw("red")
-    cell2 = Cell(win, Point(50, 50), Point(100, 150))
-    cell2.set_walls(True, False, True, False)
-    cell2.draw("blue")
-    win.draw_line(line, "red")
+    window_width = 1337
+    window_height = 420
+    win = Window(window_width, window_height)
+    maze = init_maze(win, window_width, window_height)
     win.wait_for_close()
 
     return 0
