@@ -10,7 +10,7 @@ def init_maze(win: Window, window_width: int, window_height: int) -> Maze:
     maze_height = (window_height - min_border) // cell_size
     x0 = (window_width - maze_width * cell_size) / 2
     y0 = (window_height - maze_height * cell_size) / 2
-    maze =  Maze(win, Point(x0, y0), maze_width, maze_height, cell_size, cell_size)
+    maze =  Maze(Point(x0, y0), maze_width, maze_height, cell_size, cell_size, win)
     maze.animate()
 
     return maze

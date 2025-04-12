@@ -3,7 +3,7 @@ import time
 from graphics import Window, Cell, Point
 
 class Maze():
-    def __init__(self, win: Window, top_left: Point, cols: int, rows: int, cell_width: int, cell_height: int):
+    def __init__(self, top_left: Point, cols: int, rows: int, cell_width: int, cell_height: int, win: Window = None):
         self.__window = win
         self._anchor = top_left
         self._num_cols = cols
@@ -11,9 +11,9 @@ class Maze():
         self._cell_width = cell_width
         self._cell_height = cell_height
 
-        self._create_maze()
+        self._create_cells()
 
-    def _create_maze(self) -> None:
+    def _create_cells(self) -> None:
         self._cells: list[list[Cell]]= []
         for i in range(self._num_cols):
             col = []
