@@ -27,7 +27,7 @@ class Cell():
         self.has_top_wall = True
         self.has_right_wall = True
         self.has_bottom_wall = True
-
+        self.visited = False
     def __repr__(self) -> str:
         return f"Cell({self.__p1.x:.0f}, {self.__p1.y:.0f}, {self.has_left_wall}, {self.has_top_wall}, {self.has_right_wall}, {self.has_bottom_wall})"
 
