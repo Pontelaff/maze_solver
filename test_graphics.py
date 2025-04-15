@@ -45,25 +45,13 @@ class TestCell(unittest.TestCase):
         with self.assertRaises(ValueError):
             Cell(mock_window, Point(10, 10), Point(5, 5))
 
-    def test_set_walls(self):
-        mock_window = MagicMock(spec=Window)
-        top_left = Point(0, 0)
-        bottom_right = Point(10, 10)
-        cell = Cell(mock_window, top_left, bottom_right)
-
-        cell.set_walls(False, True, False, True)
-        self.assertFalse(cell.has_left_wall)
-        self.assertTrue(cell.has_top_wall)
-        self.assertFalse(cell.has_right_wall)
-        self.assertTrue(cell.has_bottom_wall)
-
     def test_draw_calls_draw_line_correctly(self):
         mock_window = MagicMock(spec=Window)
         top_left = Point(0, 0)
         bottom_right = Point(10, 10)
         cell = Cell(mock_window, top_left, bottom_right)
 
-        cell.set_walls(True, False, False, False)
+        cell.has_left_wall = False
         cell.draw("blue")
         self.assertEqual(mock_window.draw_line.call_count, 4)
 
@@ -86,9 +74,9 @@ class TestCell(unittest.TestCase):
 class TestWindow(unittest.TestCase):
     def test_window_creation_and_close_flag(self):
         win = Window(200, 200)
-        self.assertFalse(win._Window__isRunnning)
+        self.assertFalse(win._Window__is_running)
         win.close()
-        self.assertFalse(win._Window__isRunnning)
+        self.assertFalse(win._Window__is_running)
 
     def test_draw_line_delegates(self):
         win = Window(200, 200)

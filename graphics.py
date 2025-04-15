@@ -8,7 +8,7 @@ class Point():
 
 
 class Line():
-    def __init__(self, start_point: Point, end_point):
+    def __init__(self, start_point: Point, end_point: Point):
         self.p1 = start_point
         self.p2 = end_point
 
@@ -28,14 +28,9 @@ class Cell():
         self.has_right_wall = True
         self.has_bottom_wall = True
         self.visited = False
+
     def __repr__(self) -> str:
         return f"Cell({self.__p1.x:.0f}, {self.__p1.y:.0f}, {self.has_left_wall}, {self.has_top_wall}, {self.has_right_wall}, {self.has_bottom_wall})"
-
-    def set_walls(self, left: bool, top: bool, right: bool, bottom: bool) -> None:
-        self.has_left_wall = left
-        self.has_top_wall = top
-        self.has_right_wall = right
-        self.has_bottom_wall = bottom
 
     def draw(self, color: str) -> None:
         # Draw walls based on top-left and bottom-right points
@@ -58,7 +53,8 @@ class Cell():
 
     def draw_path(self, other: object, undo: bool = False) -> None:
         if not isinstance(other, Cell):
-            raise NotImplementedError("can only draw path to other cell object")
+            raise NotImplementedError("Can only draw path to other cell object")
+
         if undo:
             color = "gray"
         else:
@@ -75,19 +71,19 @@ class Window():
         self.__root.wm_title("Maze Solver")
         self.__canvas = Canvas(self.__root, background="white", height=height, width=width)
         self.__canvas.pack(fill=BOTH, expand=1)
-        self.__isRunnning = False
+        self.__is_running = False
 
     def redraw(self) -> None:
         self.__root.update_idletasks()
         self.__root.update()
 
     def wait_for_close(self) -> None:
-        self.__isRunnning = True
-        while self.__isRunnning == True:
+        self.__is_running = True
+        while self.__is_running == True:
             self.redraw()
 
     def close(self) -> None:
-        self.__isRunnning = False
+        self.__is_running = False
 
     def draw_line(self, line: Line, color: str) -> None:
         line.draw(self.__canvas, color)
