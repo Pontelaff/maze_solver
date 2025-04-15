@@ -44,14 +44,14 @@ class TestMaze(unittest.TestCase):
         maze._init_cells()
         self.assertEqual(canvas_mock.redraw.call_count, rows * cols)
 
-    def test_animate_runtime(self):
+    def test_set_up_runtime(self):
         rows = 12
         cols = 12
         canvas_mock = MagicMock()
         maze = Maze(Point(0, 0), cols, rows, 10, 10, canvas_mock)
 
         start_time = time.time()
-        maze.animate()
+        maze.set_up()
         elapsed_time = time.time() - start_time
 
         self.assertGreater(elapsed_time, 3)

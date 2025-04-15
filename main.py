@@ -11,13 +11,13 @@ def init_maze(win: Window, window_width: int, window_height: int) -> Maze:
     x0 = (window_width - maze_width * cell_size) / 2
     y0 = (window_height - maze_height * cell_size) / 2
     maze =  Maze(Point(x0, y0), maze_width, maze_height, cell_size, cell_size, win)
-    maze.animate()
+    maze.set_up()
 
     return maze
 
 def main() -> int:
-    window_width = 1337
-    window_height = 420
+    window_width = 500
+    window_height = 900
     win = Window(window_width, window_height)
     maze = init_maze(win, window_width, window_height)
     win.wait_for_close()
