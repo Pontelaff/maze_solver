@@ -29,42 +29,58 @@ class TestLine(unittest.TestCase):
 
 
 class TestCell(unittest.TestCase):
-    def setUp(self):
-        self.mock_window = MagicMock(spec=Window)
-        self.top_left = Point(0, 0)
-        self.bottom_right = Point(10, 10)
-        self.cell = Cell(self.mock_window, self.top_left, self.bottom_right)
-
     def test_cell_creation_defaults(self):
-        self.assertTrue(self.cell.has_left_wall)
-        self.assertTrue(self.cell.has_top_wall)
-        self.assertTrue(self.cell.has_right_wall)
-        self.assertTrue(self.cell.has_bottom_wall)
+        mock_window = MagicMock(spec=Window)
+        top_left = Point(0, 0)
+        bottom_right = Point(10, 10)
+        cell = Cell(mock_window, top_left, bottom_right)
+
+        self.assertTrue(cell.has_left_wall)
+        self.assertTrue(cell.has_top_wall)
+        self.assertTrue(cell.has_right_wall)
+        self.assertTrue(cell.has_bottom_wall)
 
     def test_cell_invalid_points_raises(self):
+        mock_window = MagicMock(spec=Window)
         with self.assertRaises(ValueError):
-            Cell(self.mock_window, Point(10, 10), Point(5, 5))
+            Cell(mock_window, Point(10, 10), Point(5, 5))
 
     def test_set_walls(self):
-        self.cell.set_walls(False, True, False, True)
-        self.assertFalse(self.cell.has_left_wall)
-        self.assertTrue(self.cell.has_top_wall)
-        self.assertFalse(self.cell.has_right_wall)
-        self.assertTrue(self.cell.has_bottom_wall)
+        mock_window = MagicMock(spec=Window)
+        top_left = Point(0, 0)
+        bottom_right = Point(10, 10)
+        cell = Cell(mock_window, top_left, bottom_right)
+
+        cell.set_walls(False, True, False, True)
+        self.assertFalse(cell.has_left_wall)
+        self.assertTrue(cell.has_top_wall)
+        self.assertFalse(cell.has_right_wall)
+        self.assertTrue(cell.has_bottom_wall)
 
     def test_draw_calls_draw_line_correctly(self):
-        self.cell.set_walls(True, False, False, False)
-        self.cell.draw("blue")
-        self.mock_window.draw_line.assert_called_once()
+        mock_window = MagicMock(spec=Window)
+        top_left = Point(0, 0)
+        bottom_right = Point(10, 10)
+        cell = Cell(mock_window, top_left, bottom_right)
+
+        cell.set_walls(True, False, False, False)
+        cell.draw("blue")
+        self.assertEqual(mock_window.draw_line.call_count, 4)
 
     def test_draw_path_valid(self):
-        other_cell = Cell(self.mock_window, Point(10, 0), Point(20, 10))
-        self.cell.draw_path(other_cell)
-        self.mock_window.draw_line.assert_called()
+        mock_window = MagicMock(spec=Window)
+        cell1 = Cell(mock_window, Point(0, 0), Point(10, 10))
+        cell2 = Cell(mock_window, Point(10, 0), Point(20, 10))
+
+        cell1.draw_path(cell2)
+        mock_window.draw_line.assert_called()
 
     def test_draw_path_invalid(self):
+        mock_window = MagicMock(spec=Window)
+        cell = Cell(mock_window, Point(0, 0), Point(10, 10))
+
         with self.assertRaises(NotImplementedError):
-            self.cell.draw_path("not_a_cell")
+            cell.draw_path("not_a_cell")
 
 
 class TestWindow(unittest.TestCase):

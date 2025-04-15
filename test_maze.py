@@ -34,13 +34,13 @@ class TestMaze(unittest.TestCase):
         self.assertEqual(maze._cells[2][1].has_right_wall, False)
         self.assertEqual(canvas_mock.redraw.call_count, 2)
 
-    def test_animate(self):
+    def test_init_cells(self):
         rows = 2
         cols = 3
         canvas_mock = MagicMock()
         maze = Maze(Point(0, 0), cols, rows, 10, 10, canvas_mock)
-        maze.animate()
-        self.assertEqual(canvas_mock.redraw.call_count, rows * cols + 2)
+        maze._init_cells()
+        self.assertEqual(canvas_mock.redraw.call_count, rows * cols)
 
     def test_animate_runtime(self):
         rows = 12
