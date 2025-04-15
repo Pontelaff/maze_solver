@@ -20,6 +20,7 @@ def main() -> int:
     window_height = 900
     win = Window(window_width, window_height)
     maze = init_maze(win, window_width, window_height)
+    maze.solve()
     win.wait_for_close()
 
     return 0

@@ -101,3 +101,38 @@ class Maze():
         self._break_walls_recursive(0, 0)
         self._break_entrance_and_exit()
         self._reset_visited()
+
+    def _solve_recursive(self, i: int, j: int) -> bool:
+        self._cells[i][j].visited = True
+        if i == self._num_cols - 1 and j == self._num_rows - 1:
+            # Reached the exit
+            return True
+
+        # Get all neighbors that are not blocked off by walls
+        neighbors = []
+        if i > 0 and not self._cells[i][j].has_left_wall:
+            neighbors.append((i - 1, j))
+        if i < self._num_cols - 1 and not self._cells[i][j].has_right_wall:
+            neighbors.append((i + 1, j))
+        if j > 0 and not self._cells[i][j].has_top_wall:
+            neighbors.append((i, j - 1))
+        if j < self._num_rows - 1 and not self._cells[i][j].has_bottom_wall:
+            neighbors.append((i, j + 1))
+
+        for next_i, next_j in neighbors:
+            if not self._cells[next_i][next_j].visited:
+                # Check if the next neighbor is the exit
+                self._cells[i][j].draw_path(self._cells[next_i][next_j])
+                self._animate()
+                if self._solve_recursive(next_i, next_j):
+                    # Reached the exit
+                    return True
+                else:
+                    # Redraw the path gray if dead end
+                    self._cells[i][j].draw_path(self._cells[next_i][next_j], undo=True)
+                    self._animate()
+
+        return False
+
+    def solve(self) -> bool:
+        return self._solve_recursive(0, 0)
