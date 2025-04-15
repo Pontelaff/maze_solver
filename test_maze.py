@@ -29,6 +29,7 @@ class TestMaze(unittest.TestCase):
     def test_break_entrance_and_exit(self):
         canvas_mock = MagicMock()
         maze = Maze(Point(0, 0), 3, 2, 10, 10, canvas_mock)
+        maze._animation_delay_sec = 0
         maze._break_entrance_and_exit()
         self.assertEqual(maze._cells[0][0].has_left_wall, False)
         self.assertEqual(maze._cells[2][1].has_right_wall, False)
@@ -39,6 +40,7 @@ class TestMaze(unittest.TestCase):
         cols = 3
         canvas_mock = MagicMock()
         maze = Maze(Point(0, 0), cols, rows, 10, 10, canvas_mock)
+        maze._animation_delay_sec = 0
         maze._init_cells()
         self.assertEqual(canvas_mock.redraw.call_count, rows * cols)
 
@@ -54,6 +56,35 @@ class TestMaze(unittest.TestCase):
 
         self.assertGreater(elapsed_time, 3)
         self.assertLess(elapsed_time, 5)
+
+    def test_break_walls_recursive(self):
+        rows = 5
+        cols = 5
+        canvas_mock = MagicMock()
+        maze = Maze(Point(0,0), rows, cols, 10, 10, canvas_mock)
+        maze._animation_delay_sec = 0
+        maze._break_walls_recursive(0, 0)
+
+        for i in range(cols):
+            for j in range(rows):
+                num_walls = int(maze._cells[i][j].has_left_wall)
+                num_walls += int(maze._cells[i][j].has_top_wall)
+                num_walls += int(maze._cells[i][j].has_right_wall)
+                num_walls += int(maze._cells[i][j].has_bottom_wall)
+                self.assertLess(num_walls, 4)
+
+    def test_reset_visited(self):
+        rows = 5
+        cols = 5
+        canvas_mock = MagicMock()
+        maze = Maze(Point(0,0), rows, cols, 10, 10, canvas_mock)
+        maze._animation_delay_sec = 0
+        maze._break_walls_recursive(0, 0)
+        maze._reset_visited()
+
+        for i in range(cols):
+            for j in range(rows):
+                self.assertEqual(maze._cells[i][j].visited, False)
 
 if __name__ == "__main__":
     unittest.main()

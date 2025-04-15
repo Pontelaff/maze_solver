@@ -83,9 +83,12 @@ class Maze():
         for i in range(self._num_cols):
             for j in range(self._num_rows):
                 self._draw_cell(i, j)
-                self.__window.redraw()
-                time.sleep(self._animation_delay_sec)
+
+    def _reset_visited(self) -> None:
+        for i in range(self._num_cols):
+            for j in range(self._num_rows):
+                self._cells[i][j].visited = False
 
         self._break_walls_recursive(0, 0)
         self._break_entrance_and_exit()
-
+        self._reset_visited()
