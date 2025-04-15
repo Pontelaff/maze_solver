@@ -19,7 +19,7 @@ class Line():
 class Cell():
     def __init__(self, win: "Window", top_left: Point, bottom_right: Point):
         if top_left.x > bottom_right.x or top_left.y > bottom_right.y:
-            raise ValueError("Cell excpects top-left and bottom-right point as input")
+            raise ValueError("Cell expects top-left and bottom-right point as input")
         self.__win = win
         self.__p1 = top_left
         self.__p2 = bottom_right
@@ -27,6 +27,9 @@ class Cell():
         self.has_top_wall = True
         self.has_right_wall = True
         self.has_bottom_wall = True
+
+    def __repr__(self) -> str:
+        return f"Cell({self.__p1.x:.0f}, {self.__p1.y:.0f}, {self.has_left_wall}, {self.has_top_wall}, {self.has_right_wall}, {self.has_bottom_wall})"
 
     def set_walls(self, left: bool, top: bool, right: bool, bottom: bool) -> None:
         self.has_left_wall = left
@@ -38,12 +41,20 @@ class Cell():
         # Draw walls based on top-left and bottom-right points
         if self.has_left_wall:
             self.__win.draw_line(Line(self.__p1, Point(self.__p1.x, self.__p2.y)), color)
+        else:
+            self.__win.draw_line(Line(self.__p1, Point(self.__p1.x, self.__p2.y)), "white")
         if self.has_top_wall:
             self.__win.draw_line(Line(self.__p1, Point(self.__p2.x, self.__p1.y)), color)
+        else:
+            self.__win.draw_line(Line(self.__p1, Point(self.__p2.x, self.__p1.y)), "white")
         if self.has_right_wall:
             self.__win.draw_line(Line(self.__p2, Point(self.__p2.x, self.__p1.y)), color)
+        else:
+            self.__win.draw_line(Line(self.__p2, Point(self.__p2.x, self.__p1.y)), "white")
         if self.has_bottom_wall:
             self.__win.draw_line(Line(self.__p2, Point(self.__p1.x, self.__p2.y)), color)
+        else:
+            self.__win.draw_line(Line(self.__p2, Point(self.__p1.x, self.__p2.y)), "white")
 
     def draw_path(self, other: object, undo: bool = False) -> None:
         if not isinstance(other, Cell):
